@@ -44,6 +44,13 @@ func New(options ...Option) (*Sanitizer, error) {
 	return s, nil
 }
 
+// NewDefault sanitizer instance without options
+func NewDefault() *Sanitizer {
+	return &Sanitizer{
+		tagName: DefaultTagName,
+	}
+}
+
 // Sanitize performs sanitization on all fields of any struct, so long
 // as the sanitization tag ("san" by default) has been defined on the string
 // fields of the struct. The argument s must be the address of a struct to

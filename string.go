@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 )
 
 // sanitizeStrField sanitizes a string field. Requires the whole
@@ -64,6 +65,11 @@ func sanitizeStrField(s Sanitizer, structValue reflect.Value, idx int) error {
 		}
 
 		// Apply rest of transforms
+		if _, ok := tags["control"]; ok {
+			oldStr := field.String()
+			field.SetString(strings.Map(removeControlRune, oldStr))
+		}
+
 		if _, ok := tags["date"]; ok {
 			oldStr := field.String()
 			field.SetString(date(s.dateInput, s.dateKeepFormat, s.dateOutput, oldStr))
@@ -151,4 +157,12 @@ func date(in []string, keepFormat bool, out, v string) string {
 		return t.Format(outf)
 	}
 	return ""
+}
+
+func removeControlRune(r rune) rune {
+	if unicode.IsControl(r) {
+		return -1
+	}
+
+	return r
 }
