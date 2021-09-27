@@ -1,3 +1,3 @@
-module github.com/go-sanitize/sanitize
+module github.com/mx51/sanitize
 
-go 1.12
+go 1.17
