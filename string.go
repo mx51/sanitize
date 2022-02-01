@@ -40,7 +40,7 @@ func sanitizeStrField(s Sanitizer, structValue reflect.Value, idx int) error {
 		if !field.CanSet() {
 			// private/unexported field which cannot be changed, no point trying to sanitize it.
 			// we will not be able to write it using field.SetString (it will panic while checking whether it is assignable)
-			return nil
+			continue
 		}
 
 		isPtr := field.Kind() == reflect.Ptr
