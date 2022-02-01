@@ -9,6 +9,10 @@ import (
 	"unicode"
 )
 
+const (
+	nullRune = rune('\u0000')
+)
+
 // sanitizeStrField sanitizes a string field. Requires the whole
 // reflect.Value for the struct because it needs access to both the Value and
 // Type of the struct.
@@ -48,6 +52,9 @@ func sanitizeStrField(s Sanitizer, structValue reflect.Value, idx int) error {
 			// Dereference then continue as normal.
 			field = field.Elem()
 		}
+
+		// Always strip out null chars
+		field.SetString(strings.Map(removeNullChars, field.String()))
 
 		// Let's strip out invalid characters before anything else
 		if _, ok := tags["xss"]; ok {
@@ -161,6 +168,14 @@ func date(in []string, keepFormat bool, out, v string) string {
 
 func removeControlRune(r rune) rune {
 	if unicode.IsControl(r) {
+		return -1
+	}
+
+	return r
+}
+
+func removeNullChars(r rune) rune {
+	if r == nullRune {
 		return -1
 	}
 

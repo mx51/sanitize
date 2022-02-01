@@ -97,6 +97,19 @@ func Test_sanitizeStrField(t *testing.T) {
 		wantErr bool
 	}{
 		{
+			name: "Always remove NullCharacter even if field does not have any tags for string.",
+			args: args{
+				v: &TestStrStructNoOp{
+					Field: "\u0000 tEst \u0000",
+				},
+				idx: 0,
+			},
+			want: &TestStrStructNoOp{
+				Field: " tEst ",
+			},
+			wantErr: false,
+		},
+		{
 			name: "No operation if field does not have tags for string.",
 			args: args{
 				v: &TestStrStructNoOp{
