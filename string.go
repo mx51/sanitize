@@ -37,6 +37,12 @@ func sanitizeStrField(s Sanitizer, structValue reflect.Value, idx int) error {
 	}
 
 	for _, field := range fields {
+		if !field.CanSet() {
+			// private/unexported field which cannot be changed, no point trying to sanitize it.
+			// we will not be able to write it using field.SetString (it will panic while checking whether it is assignable)
+			return nil
+		}
+
 		isPtr := field.Kind() == reflect.Ptr
 		if isPtr && field.IsNil() {
 			// Only handle "def" if it is present, then finish san.
@@ -174,6 +180,9 @@ func removeControlRune(r rune) rune {
 	return r
 }
 
+// removeNullChars can be provided to strings.Map to remove null characters from a string
+// When it returns a negative value the character is dropped from the string with no replacement.
+// see: https://pkg.go.dev/strings#Map
 func removeNullChars(r rune) rune {
 	if r == nullRune {
 		return -1
