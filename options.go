@@ -1,5 +1,9 @@
 package sanitize
 
+const optionTagNameID = "tag-name"
+
+const optionDateFormatID = "date-format"
+
 // Option represents an optional setting for the sanitizer library
 type Option interface {
 	id() string
@@ -12,8 +16,6 @@ type OptionTagName struct {
 }
 
 var _ Option = OptionTagName{}
-
-const optionTagNameID = "tag-name"
 
 func (o OptionTagName) id() string {
 	return optionTagNameID
@@ -33,8 +35,6 @@ type OptionDateFormat struct {
 }
 
 var _ Option = OptionDateFormat{}
-
-const optionDateFormatID = "date-format"
 
 func (o OptionDateFormat) id() string {
 	return optionDateFormatID

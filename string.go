@@ -13,6 +13,10 @@ const (
 	nullRune = rune('\u0000')
 )
 
+var replaceWhitespaces = regexp.MustCompile(`\s\s+`)
+
+var blacklistStripping = regexp.MustCompile(`[\p{Me}\p{C}<>=;(){}\[\]?]`)
+
 // sanitizeStrField sanitizes a string field. Requires the whole
 // reflect.Value for the struct because it needs access to both the Value and
 // Type of the struct.
@@ -147,9 +151,6 @@ func toCap(s string) string {
 	}
 	return string(b)
 }
-
-var replaceWhitespaces = regexp.MustCompile(`\s\s+`)
-var blacklistStripping = regexp.MustCompile(`[\p{Me}\p{C}<>=;(){}\[\]?]`)
 
 func xss(s string) string {
 	s = blacklistStripping.ReplaceAllString(s, " ")
