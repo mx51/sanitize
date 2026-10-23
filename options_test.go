@@ -5,9 +5,9 @@ import (
 	"testing"
 )
 
-type unknownOption struct{}
-
 var _ Option = unknownOption{}
+
+type unknownOption struct{}
 
 func (o unknownOption) id() string {
 	return "strangetag!"
